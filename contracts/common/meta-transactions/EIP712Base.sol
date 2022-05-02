@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 // https://github.com/ProjectOpenSea/opensea-creatures/blob/master/contracts/
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.1;
 
 import {Initializable} from "./Initializable.sol";
 
@@ -57,7 +57,7 @@ contract EIP712Base is Initializable {
         return id;
     }
 
-    /**
+    /*
      * Accept message hash and returns hash message in EIP712 compatible form
      * So that it can be used to recover signer from signature signed using EIP712 formatted data
      * https://eips.ethereum.org/EIPS/eip-712

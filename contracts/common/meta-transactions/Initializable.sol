@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 // https://github.com/ProjectOpenSea/opensea-creatures/blob/master/contracts/
 
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.1;
 
 contract Initializable {
     bool inited = false;

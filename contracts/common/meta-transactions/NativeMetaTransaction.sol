@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 // https://github.com/ProjectOpenSea/opensea-creatures/blob/master/contracts/
 
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.1;
 
 import {SafeMath} from  "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import {EIP712Base} from "./EIP712Base.sol";
