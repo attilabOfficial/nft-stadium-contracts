@@ -3,7 +3,7 @@ pragma solidity ^0.8.1;
 import "./BasicNFT.sol";
 
 
-contract MapContract is BasicNFT{
+contract StadiumNFT is BasicNFT{
 
     struct MapPiece {
       string img;

@@ -1,10 +1,10 @@
 
 const { expect, assert } = require("chai");
 
-describe("MapContract contract", function () {
+describe("StadiumNFT contract", function () {
 
 
-    let MapContract;
+    let StadiumNFT;
     let hardhatToken;
     let owner;
     let addr1;
@@ -17,9 +17,9 @@ describe("MapContract contract", function () {
     };
 
     beforeEach(async function () {
-        MapContract = await ethers.getContractFactory("MapContract");
+        StadiumNFT = await ethers.getContractFactory("StadiumNFT");
         [owner, addr1, addr2, ...addrs] = await ethers.getSigners();
-        hardhatToken = await MapContract.deploy("TokenMap", "TKM", "http://localhost",10);
+        hardhatToken = await StadiumNFT.deploy("TokenMap", "TKM", "http://localhost",10);
         await hardhatToken.deployed();
 
         checkPiece = async (id, ownerAddress) => {
