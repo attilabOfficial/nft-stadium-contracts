@@ -22,18 +22,30 @@ contract StadiumNFT is BasicNFT{
 
     // Change the img associate with the piece
     function changeImg(uint256 _tokenId, string calldata _img) public onlyTokenOwnerOrAdminOrOwner(_tokenId){
-        require(_tokenId != 0);
+        require(_tokenId <= totalSupply(), "NFT don't exist");
         _mapPieceList[_tokenId].img=_img;
     }
 
     // Change the img associate with the piece
     function changeUrl(uint256 _tokenId, string calldata _url) public onlyTokenOwnerOrAdminOrOwner(_tokenId){
-        require(_tokenId != 0);
+        require(_tokenId <= totalSupply(), "NFT don't exist");
         _mapPieceList[_tokenId].url=_url;
     }
 
     function getPieceInfo(uint256 _tokenId) public view returns(MapPiece memory){
         return _mapPieceList[_tokenId];
+    }
+
+    function getStadium() public view returns(string[] memory, string[] memory){
+        string[] memory imgs = new string[](totalSupply());
+        string[] memory urls = new string[](totalSupply());
+
+        for (uint i = 0; i < totalSupply(); i++) {
+            imgs[i] = _mapPieceList[i].img;
+            urls[i] = _mapPieceList[i].url;
+        }
+
+        return(imgs, urls);
     }
 
 }

@@ -38,9 +38,9 @@ contract BasicNFT is ERC721Enumerable, AdministrableAndOwnable{
         require(!paused, "Contract is paused");
         require(msg.value >= cost, "Not enought money");
         require(_tokenIds.current() < maxSupply,  "Max supply");
-
-        _tokenIds.increment();
         _safeMint(_to, _tokenIds.current());
+        _tokenIds.increment();
+
     }
 
      function tokenURI(uint256 tokenId)
@@ -63,10 +63,6 @@ contract BasicNFT is ERC721Enumerable, AdministrableAndOwnable{
     modifier onlyTokenOwnerOrAdminOrOwner(uint256 _tokenId) {
         require(msg.sender == ownerOf(_tokenId)|| msg.sender == admin() || msg.sender == owner(), "Not authorized");
     _;
-    }
-
-    function numberOfToken() public view  returns( uint ){
-        return _tokenIds.current();
     }
 
     //only owner
