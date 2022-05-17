@@ -99,7 +99,7 @@ describe("StadiumNFT contract", function () {
         });
         it("Should not mint if don't have enought money", async function () {
             await expect(hardhatToken.mint(owner.address,{
-                value: ethers.utils.parseEther("0.01")
+                value: ethers.utils.parseEther("0.001")
             })).to.be.revertedWith("Not enought money");
 
         });
@@ -112,7 +112,8 @@ describe("StadiumNFT contract", function () {
              expect(piece['img']).to.equal('toto');
 
              const stadiumMap = await hardhatToken.getStadium();
-             expect(stadiumMap[0][0]).to.equal('toto');
+             expect(stadiumMap[0][0]).to.equal(owner.address);
+             expect(stadiumMap[1][0]).to.equal('toto');
  
          });
 
@@ -134,25 +135,38 @@ describe("StadiumNFT contract", function () {
 
 
             const stadiumMap = await hardhatToken.getStadium();
-            expect(stadiumMap[0][0]).to.equal('img0');
-            expect(stadiumMap[0][1]).to.equal('');
-            expect(stadiumMap[0][3]).to.equal('img3');
-            expect(stadiumMap[0][4]).to.equal('img4');
-            expect(stadiumMap[0][5]).to.equal('');
-            expect(stadiumMap[0][6]).to.equal('');
-            expect(stadiumMap[0][7]).to.equal('');
-            expect(stadiumMap[0][8]).to.equal('');
-            expect(stadiumMap[0][9]).to.equal('');
+           
+            expect(stadiumMap[0]).to.eql([owner.address,
+                 addr1.address,
+                 addr2.address, 
+                 addr1.address,
+                 addr2.address, 
+                 owner.address, 
+                 addr1.address,
+                 addr2.address, 
+                 addr1.address,
+                 addr2.address]);
 
-            expect(stadiumMap[1][0]).to.equal('');
+
+            expect(stadiumMap[1][0]).to.equal('img0');
             expect(stadiumMap[1][1]).to.equal('');
-            expect(stadiumMap[1][3]).to.equal('');
-            expect(stadiumMap[1][4]).to.equal('');
+            expect(stadiumMap[1][3]).to.equal('img3');
+            expect(stadiumMap[1][4]).to.equal('img4');
             expect(stadiumMap[1][5]).to.equal('');
             expect(stadiumMap[1][6]).to.equal('');
             expect(stadiumMap[1][7]).to.equal('');
             expect(stadiumMap[1][8]).to.equal('');
             expect(stadiumMap[1][9]).to.equal('');
+
+            expect(stadiumMap[2][0]).to.equal('');
+            expect(stadiumMap[2][1]).to.equal('');
+            expect(stadiumMap[2][3]).to.equal('');
+            expect(stadiumMap[2][4]).to.equal('');
+            expect(stadiumMap[2][5]).to.equal('');
+            expect(stadiumMap[2][6]).to.equal('');
+            expect(stadiumMap[2][7]).to.equal('');
+            expect(stadiumMap[2][8]).to.equal('');
+            expect(stadiumMap[2][9]).to.equal('');
 
 
         });

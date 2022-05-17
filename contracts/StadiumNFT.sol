@@ -36,16 +36,19 @@ contract StadiumNFT is BasicNFT{
         return _mapPieceList[_tokenId];
     }
 
-    function getStadium() public view returns(string[] memory, string[] memory){
+    function getStadium() public view returns(address[] memory, string[] memory, string[] memory){
         string[] memory imgs = new string[](totalSupply());
         string[] memory urls = new string[](totalSupply());
+        address[] memory owners = new address[](totalSupply());
+
 
         for (uint i = 0; i < totalSupply(); i++) {
             imgs[i] = _mapPieceList[i].img;
             urls[i] = _mapPieceList[i].url;
+            owners[i] = ownerOf(i);
         }
 
-        return(imgs, urls);
+        return(owners, imgs, urls);
     }
 
 }
