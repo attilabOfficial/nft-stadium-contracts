@@ -16,7 +16,7 @@ contract BasicNFT is ERC721Enumerable, AdministrableAndOwnable{
 
     string public baseURI;
     string public baseExtension = ".json";
-    uint256 public cost = 1.00 ether;
+    uint256 public cost = 0.01 ether;
     uint256 public maxSupply = 10;
     bool public paused = false;
 
