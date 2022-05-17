@@ -31,16 +31,16 @@ describe("Basic NFT features", function () {
         }
 
         mint10 = async(_)=>{
-            await hardhatToken.mint(owner.address,overrides);
-            await hardhatToken.connect(addr1).mint(addr1.address,overrides);
-            await hardhatToken.connect(addr2).mint(addr2.address,overrides);
-            await hardhatToken.connect(addr1).mint(addr1.address,overrides);
-            await hardhatToken.connect(addr2).mint(addr2.address,overrides);
-            await hardhatToken.mint(owner.address,overrides);
-            await hardhatToken.connect(addr1).mint(addr1.address,overrides);
-            await hardhatToken.connect(addr2).mint(addr2.address,overrides);
-            await hardhatToken.connect(addr1).mint(addr1.address,overrides);
-            await hardhatToken.connect(addr2).mint(addr2.address,overrides);
+            await hardhatToken.mint(owner.address,0,overrides);
+            await hardhatToken.connect(addr1).mint(addr1.address,1,overrides);
+            await hardhatToken.connect(addr2).mint(addr2.address,2,overrides);
+            await hardhatToken.connect(addr1).mint(addr1.address,3,overrides);
+            await hardhatToken.connect(addr2).mint(addr2.address,4,overrides);
+            await hardhatToken.mint(owner.address,5,overrides);
+            await hardhatToken.connect(addr1).mint(addr1.address,6,overrides);
+            await hardhatToken.connect(addr2).mint(addr2.address,7,overrides);
+            await hardhatToken.connect(addr1).mint(addr1.address,8,overrides);
+            await hardhatToken.connect(addr2).mint(addr2.address,9,overrides);
         }
     });
   
@@ -54,7 +54,7 @@ describe("Basic NFT features", function () {
 
         });
         it("Balance sould be 1 after minting an NFT", async function () {
-            await hardhatToken.mint(owner.address, overrides);
+            await hardhatToken.mint(owner.address, 5, overrides);
             expect(await hardhatToken.balanceOf(owner.address)).to.equal(1);
             expect(await hardhatToken.totalSupply()).to.equal(1);
         });
@@ -70,7 +70,7 @@ describe("Basic NFT features", function () {
     describe("Check balance and total supply after transfert", function () {
     
         it("Balance sould be 1 and 0 after transfert an NFT", async function () {
-            await hardhatToken.mint(owner.address, overrides);
+            await hardhatToken.mint(owner.address, 0,  overrides);
             await hardhatToken.transferFrom(owner.address, addr1.address, 0);
 
             expect(await hardhatToken.balanceOf(owner.address)).to.equal(0);
@@ -106,6 +106,20 @@ describe("Basic NFT features", function () {
             expect(await hardhatToken.balanceOf(addr2.address)).to.equal(3);
             expect(await hardhatToken.totalSupply()).to.equal(10);
         });
+
+    });
+    describe("Mint by ID", function () {
+    
+        it("Out of bounds", async function () {
+            await expect(hardhatToken.mint(owner.address, 11,  overrides)).to.be.revertedWith("Out of bounds");;
+        });
+        it("Already minted", async function () {
+            await hardhatToken.mint(owner.address, 8, overrides);
+            await expect(hardhatToken.connect(addr1).mint(addr1.address,8,overrides)).to.be.revertedWith("ERC721: token already minted");;;
+
+
+        });
+
 
     });
 

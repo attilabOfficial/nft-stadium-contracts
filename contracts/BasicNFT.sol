@@ -34,11 +34,14 @@ contract BasicNFT is ERC721Enumerable, AdministrableAndOwnable{
         return baseURI;
     }
 
-    function mint(address _to) public payable {
+    function mint(address _to, uint256 _tokenToMint) public payable {
         require(!paused, "Contract is paused");
         require(msg.value >= cost, "Not enought money");
         require(_tokenIds.current() < maxSupply,  "Max supply");
-        _safeMint(_to, _tokenIds.current());
+        require(_exists(_tokenToMint)==false, "ERC721: token already minted");
+        require(_tokenToMint < maxSupply,  "Out of bounds");
+
+        _safeMint(_to, _tokenToMint);
         _tokenIds.increment();
 
     }

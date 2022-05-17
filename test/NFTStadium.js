@@ -31,16 +31,16 @@ describe("StadiumNFT contract", function () {
         }
 
         mint10 = async(_)=>{
-            await hardhatToken.mint(owner.address,overrides);
-            await hardhatToken.connect(addr1).mint(addr1.address,overrides);
-            await hardhatToken.connect(addr2).mint(addr2.address,overrides);
-            await hardhatToken.connect(addr1).mint(addr1.address,overrides);
-            await hardhatToken.connect(addr2).mint(addr2.address,overrides);
-            await hardhatToken.mint(owner.address,overrides);
-            await hardhatToken.connect(addr1).mint(addr1.address,overrides);
-            await hardhatToken.connect(addr2).mint(addr2.address,overrides);
-            await hardhatToken.connect(addr1).mint(addr1.address,overrides);
-            await hardhatToken.connect(addr2).mint(addr2.address,overrides);
+            await hardhatToken.mint(owner.address,0,overrides);
+            await hardhatToken.connect(addr1).mint(addr1.address,1,overrides);
+            await hardhatToken.connect(addr2).mint(addr2.address,2,overrides);
+            await hardhatToken.connect(addr1).mint(addr1.address,3,overrides);
+            await hardhatToken.connect(addr2).mint(addr2.address,4,overrides);
+            await hardhatToken.mint(owner.address,5,overrides);
+            await hardhatToken.connect(addr1).mint(addr1.address,6,overrides);
+            await hardhatToken.connect(addr2).mint(addr2.address,7,overrides);
+            await hardhatToken.connect(addr1).mint(addr1.address,8,overrides);
+            await hardhatToken.connect(addr2).mint(addr2.address,9,overrides);
         }
     });
   
@@ -62,17 +62,17 @@ describe("StadiumNFT contract", function () {
     describe("Mint", async function () {
         it("Should mint one NFT", async function () {
           
-            await hardhatToken.mint(owner.address, overrides);
+            await hardhatToken.mint(owner.address, 0, overrides);
             checkPiece(0, owner.address);
             expect(await hardhatToken.totalSupply()).to.equal(1);
         });
 
         it("Should mint 5 nft with different users", async function () {
-            await hardhatToken.mint(owner.address,overrides);
-            await hardhatToken.connect(addr1).mint(addr1.address,overrides);
-            await hardhatToken.connect(addr2).mint(addr2.address,overrides);
-            await hardhatToken.connect(addr1).mint(addr1.address,overrides);
-            await hardhatToken.connect(addr2).mint(addr2.address,overrides);
+            await hardhatToken.mint(owner.address,0,overrides);
+            await hardhatToken.connect(addr1).mint(addr1.address,1,overrides);
+            await hardhatToken.connect(addr2).mint(addr2.address,2,overrides);
+            await hardhatToken.connect(addr1).mint(addr1.address,3,overrides);
+            await hardhatToken.connect(addr2).mint(addr2.address,4,overrides);
             checkPiece(0, owner.address);
             checkPiece(1, addr1.address);
             checkPiece(2, addr2.address);
@@ -95,10 +95,10 @@ describe("StadiumNFT contract", function () {
         });
         it("Should not add more than 10 nft", async function () {
                 await mint10();
-                await expect(hardhatToken.connect(addr2).mint(addr2.address,overrides)).to.be.revertedWith("Max supply");
+                await expect(hardhatToken.connect(addr2).mint(addr2.address,11,overrides)).to.be.revertedWith("Max supply");
         });
         it("Should not mint if don't have enought money", async function () {
-            await expect(hardhatToken.mint(owner.address,{
+            await expect(hardhatToken.mint(owner.address,0,{
                 value: ethers.utils.parseEther("0.001")
             })).to.be.revertedWith("Not enought money");
 
@@ -106,7 +106,7 @@ describe("StadiumNFT contract", function () {
     });
     describe("Change imgage", async function () {
         it("Should change the img", async function () {
-             await hardhatToken.mint(owner.address, overrides);
+             await hardhatToken.mint(owner.address, 0, overrides);
              await hardhatToken.changeImg(0, 'toto');
              const piece = await hardhatToken.getPieceInfo(0);
              expect(piece['img']).to.equal('toto');
@@ -147,7 +147,6 @@ describe("StadiumNFT contract", function () {
                  addr1.address,
                  addr2.address]);
 
-
             expect(stadiumMap[1][0]).to.equal('img0');
             expect(stadiumMap[1][1]).to.equal('');
             expect(stadiumMap[1][3]).to.equal('img3');
@@ -157,7 +156,63 @@ describe("StadiumNFT contract", function () {
             expect(stadiumMap[1][7]).to.equal('');
             expect(stadiumMap[1][8]).to.equal('');
             expect(stadiumMap[1][9]).to.equal('');
+            expect(stadiumMap[2][0]).to.equal('');
+            expect(stadiumMap[2][1]).to.equal('');
+            expect(stadiumMap[2][3]).to.equal('');
+            expect(stadiumMap[2][4]).to.equal('');
+            expect(stadiumMap[2][5]).to.equal('');
+            expect(stadiumMap[2][6]).to.equal('');
+            expect(stadiumMap[2][7]).to.equal('');
+            expect(stadiumMap[2][8]).to.equal('');
+            expect(stadiumMap[2][9]).to.equal('');
+        });
 
+        it("Should change multiple img with unminted nft", async function () {
+            await hardhatToken.connect(addr1).mint(addr1.address,1,overrides);
+            await hardhatToken.connect(addr2).mint(addr2.address,2,overrides);
+            await hardhatToken.connect(addr1).mint(addr1.address,3,overrides);
+            await hardhatToken.connect(addr2).mint(addr2.address,4,overrides);
+            await hardhatToken.mint(owner.address,5,overrides);
+            await hardhatToken.connect(addr2).mint(addr2.address,7,overrides);
+            await hardhatToken.connect(addr1).mint(addr1.address,8,overrides);
+            await hardhatToken.connect(addr2).mint(addr2.address,9,overrides);
+
+            await hardhatToken.changeImg(5, 'img0');
+            await hardhatToken.connect(addr2).changeImg(2, 'img2');
+            await hardhatToken.connect(addr1).changeImg(3, 'img3');
+            await hardhatToken.connect(addr2).changeImg(4, 'img4');
+
+            const piece = await hardhatToken.getPieceInfo(5);
+            expect(piece['img']).to.equal('img0');
+            const piece2 = await hardhatToken.getPieceInfo(2);
+            expect(piece2['img']).to.equal('img2');
+            const piece3 = await hardhatToken.getPieceInfo(3);
+            expect(piece3['img']).to.equal('img3');
+            const piece4 = await hardhatToken.getPieceInfo(4);
+            expect(piece4['img']).to.equal('img4');
+
+            const stadiumMap = await hardhatToken.getStadium();
+
+            expect(stadiumMap[0]).to.eql([
+                '0x0000000000000000000000000000000000000000',
+                 addr1.address,
+                 addr2.address, 
+                 addr1.address,
+                 addr2.address, 
+                 owner.address, 
+                 '0x0000000000000000000000000000000000000000',
+                 addr2.address, 
+                 addr1.address,
+                 addr2.address]);
+
+            expect(stadiumMap[1][5]).to.equal('img0');
+            expect(stadiumMap[1][1]).to.equal('');
+            expect(stadiumMap[1][3]).to.equal('img3');
+            expect(stadiumMap[1][4]).to.equal('img4');
+            expect(stadiumMap[1][6]).to.equal('');
+            expect(stadiumMap[1][7]).to.equal('');
+            expect(stadiumMap[1][8]).to.equal('');
+            expect(stadiumMap[1][9]).to.equal('');
             expect(stadiumMap[2][0]).to.equal('');
             expect(stadiumMap[2][1]).to.equal('');
             expect(stadiumMap[2][3]).to.equal('');
@@ -168,10 +223,9 @@ describe("StadiumNFT contract", function () {
             expect(stadiumMap[2][8]).to.equal('');
             expect(stadiumMap[2][9]).to.equal('');
 
-
         });
          it("Should not change if not owner", async function () {
-            await hardhatToken.mint(owner.address, overrides)
+            await hardhatToken.mint(owner.address,0, overrides)
             await expect(hardhatToken.connect(addr1).changeImg(0, 'toto')).to.be.revertedWith("Not authorized");
          });
      });
