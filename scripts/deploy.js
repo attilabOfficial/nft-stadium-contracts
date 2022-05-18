@@ -22,7 +22,7 @@ async function main() {
   console.log("Account balance:", (await deployer.getBalance()).toString());
 
   const Token = await ethers.getContractFactory(TOKEN_NAME);
-  const token = await Token.deploy("TokenMap", "TKM", "http://localhost",10);
+  const token = await Token.deploy("TokenMap", "TKM", "http://localhost",425);
   await token.deployed();
 
   console.log("Token address:", token.address);

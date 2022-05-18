@@ -5,6 +5,8 @@ import "./BasicNFT.sol";
 
 contract StadiumNFT is BasicNFT{
 
+    event ImgChanged(uint _imgId, string _url);
+
     struct MapPiece {
       string img;
       string url;
@@ -22,14 +24,15 @@ contract StadiumNFT is BasicNFT{
 
     // Change the img associate with the piece
     function changeImg(uint256 _tokenId, string calldata _img) public onlyTokenOwnerOrAdminOrOwner(_tokenId){
-        require(_tokenId <= totalSupply(), "NFT don't exist");
+        require(_tokenId < maxSupply, "Out of bounds");
         require(_exists(_tokenId)==true, "NFT don't exist");
         _mapPieceList[_tokenId].img=_img;
+        emit ImgChanged(_tokenId, _img);
     }
 
     // Change the img associate with the piece
     function changeUrl(uint256 _tokenId, string calldata _url) public onlyTokenOwnerOrAdminOrOwner(_tokenId){
-        require(_tokenId <= totalSupply(), "NFT don't exist");
+        require(_tokenId < maxSupply, "Out of bounds");
         require(_exists(_tokenId)==true, "NFT don't exist");
         _mapPieceList[_tokenId].url=_url;
     }
